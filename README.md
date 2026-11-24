@@ -9,6 +9,7 @@ Ce projet croise deux sources ouvertes : l'historique communal des restrictions 
 | [**Rapport Power BI en ligne**](https://app.powerbi.com/view?r=eyJrIjoiNWNlMWZkZmUtYmU3Mi00ZGM0LWE5YWQtZTVhZjc0ZGZkYWYyIiwidCI6IjZmMWFkZjIyLTgwOGEtNDIxZC04MTk1LWVjZmI1NTQyMTBmNSJ9) | Trois pages interactives, sans compte |
 | [Méthodologie](docs/METHODOLOGIE.md) | Sources, traitements, indicateurs, contrôles et limites |
 | [Mesures DAX](powerbi/mesures.dax) | Toutes les mesures du modèle |
+| [Fichier Power BI](powerbi/secheresse_bretagne_2026.pbix) | Le rapport à ouvrir dans Power BI Desktop |
 
 > Données arrêtées au **24 novembre 2026**. L'année n'est pas terminée : les chiffres de 2026 ne peuvent qu'augmenter.
 
@@ -74,6 +75,7 @@ Les années non citées comptent moins de 15 jours de restriction par commune.
 
 | Fichier | Contenu |
 |---|---|
+| [`secheresse_bretagne_2026.pbix`](powerbi/secheresse_bretagne_2026.pbix) | Le rapport Power BI complet, modèle et données compris |
 | [`secheresse_bretagne.xlsx`](powerbi/donnees/secheresse_bretagne.xlsx) | Les cinq tables du modèle, une feuille chacune : source du rapport Power BI |
 | [`dim_commune.parquet`](data/processed/dim_commune.parquet) | 1 202 communes : département, intercommunalité, coordonnées |
 | [`dim_departement.parquet`](data/processed/dim_departement.parquet) | Les quatre départements |
@@ -111,7 +113,7 @@ Pour mettre le rapport à jour, il suffit de pousser le nouveau classeur Excel s
 src/secheresse_bretagne/   Collecte, calcul des indicateurs, contrôles, assemblage du modèle
 tests/                     Tests unitaires (lecture en flux, comptage des jours, centiles)
 data/processed/            Tables du modèle au format Parquet
-powerbi/                   Classeur source du rapport et mesures DAX
+powerbi/                   Rapport .pbix, classeur source et mesures DAX
 docs/                      Méthodologie et captures du rapport
 ```
 
