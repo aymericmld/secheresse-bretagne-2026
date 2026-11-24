@@ -1,0 +1,66 @@
+// Mesures du modèle « Sécheresse Bretagne 2026 », toutes rangées dans la table dim_commune.
+// Les indicateurs sont des moyennes par commune : un total de jours divisé par le nombre de communes.
+
+// --- Mesures de base -------------------------------------------------------
+
+Communes = COUNTROWS ( dim_commune )
+
+'Jours de crise par commune' = DIVIDE ( SUM ( fact_restrictions_mois[jours_crise] ), [Communes] )
+
+'Jours d''alerte par commune' = DIVIDE ( SUM ( fact_restrictions_mois[jours_alerte] ), [Communes] )
+
+'Jours d''alerte renforcée par commune' = DIVIDE ( SUM ( fact_restrictions_mois[jours_alerte_renforcee] ), [Communes] )
+
+// --- Année 2026 ------------------------------------------------------------
+
+'Jours de crise 2026' =
+DIVIDE (
+    CALCULATE ( SUM ( fact_restrictions_mois[jours_crise] ), fact_restrictions_mois[mois] >= DATE ( 2026, 1, 1 ) ),
+    COUNTROWS ( dim_commune )
+)
+
+'Part des communes en crise 2026' =
+DIVIDE (
+    COUNTROWS (
+        FILTER (
+            dim_commune,
+            CALCULATE ( SUM ( fact_restrictions_mois[jours_crise] ), fact_restrictions_mois[mois] >= DATE ( 2026, 1, 1 ) ) > 0
+        )
+    ),
+    COUNTROWS ( dim_commune )
+)
+
+'Communes en crise en novembre 2026' =
+CALCULATE ( [Part des communes en crise 2026], fact_restrictions_mois[mois] = DATE ( 2026, 11, 1 ) )
+
+'Premier mois de crise 2026' =
+VAR m =
+    CALCULATE (
+        MIN ( fact_restrictions_mois[mois] ),
+        fact_restrictions_mois[jours_crise] > 0,
+        fact_restrictions_mois[mois] >= DATE ( 2026, 1, 1 )
+    )
+RETURN
+    SWITCH ( MONTH ( m ),
+        1, "Janvier", 2, "Février", 3, "Mars", 4, "Avril", 5, "Mai", 6, "Juin",
+        7, "Juillet", 8, "Août", 9, "Septembre", 10, "Octobre", 11, "Novembre", 12, "Décembre"
+    )
+
+'Nappes 2026 (centile)' =
+CALCULATE ( AVERAGE ( fact_nappes_mois[percentile_median] ), fact_nappes_mois[mois] >= DATE ( 2026, 1, 1 ) )
+
+'Nappes en octobre 2026 (centile)' =
+CALCULATE ( AVERAGE ( fact_nappes_mois[percentile_median] ), fact_nappes_mois[mois] = DATE ( 2026, 10, 1 ) )
+
+// --- Colonne calculée de dim_commune (légende de la carte) ------------------
+
+'Classe de crise 2026' =
+VAR j =
+    CALCULATE ( SUM ( fact_restrictions_mois[jours_crise] ), fact_restrictions_mois[mois] >= DATE ( 2026, 1, 1 ) ) + 0
+RETURN
+    SWITCH ( TRUE (),
+        j < 100, "Moins de 100 jours",
+        j < 110, "100 à 109 jours",
+        j < 120, "110 à 119 jours",
+        "120 jours et plus"
+    )
