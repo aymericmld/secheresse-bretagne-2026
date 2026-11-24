@@ -1,0 +1,24 @@
+[project]
+name = "secheresse-bretagne"
+version = "1.0.0"
+description = "Sécheresse 2026 en Bretagne : nappes et restrictions d'eau, données ouvertes et rapport Power BI"
+requires-python = ">=3.12"
+license = "MIT"
+dependencies = ["pandas>=3.0", "pyarrow", "requests", "openpyxl"]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
